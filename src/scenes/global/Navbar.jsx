@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
-import {  useSelector } from "react-redux"; //useDispatch
-import { Badge, Box, IconButton, Button, TextField, Typography } from "@mui/material";
+//import {  useSelector } from "react-redux"; //useDispatch
+import { Box, IconButton, Button, TextField, Typography } from "@mui/material";
 import {
   MenuOutlined,
   SearchOutlined
@@ -20,7 +20,7 @@ import 'reactjs-popup/dist/index.css';
 function Navbar() {
   const navigate = useNavigate();
   //const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart);
+  //const cart = useSelector((state) => state.cart.cart);
   const valueRef = useRef('')
   //const [data, setData] = useState({ data: [] });
   const [isLoading, setIsLoading] = useState(false);

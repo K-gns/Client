@@ -10,7 +10,7 @@ import { setItems } from "../../state";
 
 const ShoppingList = () => {
   const dispatch = useDispatch();
-  const [value, setValue] = useState("Все товары");
+  const [value, setValue] = useState("Смартфоны");
   const items = useSelector((state) => state.cart.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
   const [favorite, setfavorite] = useState([]);
@@ -45,13 +45,8 @@ const ShoppingList = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const smartphoneItems = items.filter(
-    (item) => favorite.find((fav) => fav.attributes?.itemID === item.id) != undefined);
-  const appliancesItems = items.filter(
-    (item) => item.attributes.category === "Бытовая техника"
-  );
-  const laptopItems = items.filter(
-    (item) => item.attributes.category === "Ноутбуки"
-  );
+    (item) => favorite.find((fav) => fav.attributes?.itemID === item.id) !== undefined);
+  
 
   return (
     <Box width="80%" margin="80px auto">
@@ -72,10 +67,7 @@ const ShoppingList = () => {
           },
         }}
       >
-        <Tab label="Все товары" value="Все товары" />
-        <Tab label="Смартфоны" value="Смартфоны" />
-        <Tab label="Бытовая техника" value="Бытовая техника" />
-        <Tab label="Ноутбуки" value="Ноутбуки" />
+        <Tab label="Любимые" value="Смартфоны" />
       </Tabs>
       <Box
         margin="0 auto"
@@ -85,20 +77,8 @@ const ShoppingList = () => {
         rowGap="20px"
         columnGap="1.33%"
       >
-        {value === "Все товары" &&
-          items.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
-          ))}
         {value === "Смартфоны" &&
           smartphoneItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
-          ))}
-        {value === "Бытовая техника" &&
-          appliancesItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
-          ))}
-        {value === "Ноутбуки" &&
-          laptopItems.map((item) => (
             <Item item={item} key={`${item.name}-${item.id}`} />
           ))}
       </Box>

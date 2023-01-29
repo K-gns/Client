@@ -224,7 +224,6 @@ const ItemDetails = () => {
 
       if (!response.ok) {
         throw new Error(`Error! status: ${response.status}`);
-        console.log(await response.json())
       }
 
       console.log(await response.json())
