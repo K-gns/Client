@@ -24,10 +24,10 @@ const Profile = () => {
       const responseData = await response.json();
 
       setUser(responseData);
-      message.success("Data saved successfully!");
+      message.success("Успешно сохранено!");
     } catch (error) {
       console.error(Error);
-      message.error("Error While Updating the Profile!");
+      message.error("Ошибка во время загрузки!");
     } finally {
       setLoading(false);
     }

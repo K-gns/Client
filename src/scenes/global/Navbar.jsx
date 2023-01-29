@@ -137,7 +137,7 @@ function Navbar() {
                         {() => close()}>
                         Закрыть
                       </Button>
-                      {isLoading && <h2>Loading...</h2>}
+                      {isLoading && <h2>Подождите...</h2>}
                     </Box>
                   </Box>
                 )

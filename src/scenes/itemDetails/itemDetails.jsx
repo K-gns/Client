@@ -180,58 +180,19 @@ const ItemDetails = () => {
     console.log(problem, problemDesc)
 
     try {
-
-      console.log({
-        "data": [{
-          "type": problem,
-          "detailed": problemDesc
-        }]
-      })
-
-      let a = {
-        type: problem,
-        detailed: problemDesc
-      };
-
-      // const response = await fetch(`https://getprice.up.railway.app/api/reports`, {
-      //   method: 'Post',
-      //   headers: {
-      //     Accept: 'application/json',
-      //   },
-      //   body: {
-      //     "data": {
-      //       "attributes": {
-      //         "type": problem,
-      //         "detailed": problemDesc
-      //       }
-
-      //     }
-      //   }
-      // });
-      // const response = await axios.post(
-      //   "https://getprice.up.railway.app/api/reports",
-      //   a);
-      // console.log(response.json())
-
-      const response = axios.post('https://getprice.up.railway.app/api/reports',{
-        json: a.toString()
-      }, {
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': 'Bearer '
+      const response = axios.post('https://getprice.up.railway.app/api/reports',
+      {
+        "data": {
+          type: problem,
+          detailed: problemDesc,
+          itemID: itemId
         }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error! status: ${response.status}`);
       }
+    )
+    .then(response => {
+      console.log(response);
+    });
 
-      console.log(await response.json())
-      window.location.replace(`/item/${itemId}`);
-      //setData(result);
-    } catch (err) {
-      console.log("не очень")
-      //setErr(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -413,7 +374,7 @@ const ItemDetails = () => {
                           {() => close()}>
                           Закрыть
                         </Button>
-                        {isLoading && <h2>Loading...</h2>}
+                        {isLoading && <h2>Подождите...</h2>}
                       </Box>
                     </Box>
                   )
