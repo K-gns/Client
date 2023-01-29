@@ -125,6 +125,14 @@ const ItemDetails = () => {
         "shop": "CITILINK",
         "price": arr2[0].value?.citilinkPrice,
         "link": arr2[0].value?.citilinkLink
+      }, {
+      "shop": "SPCOMPUTER",
+        "price": arr2[0].value?.spcomputerPrice,
+        "link": arr2[0].value?.spcomputerLink
+      }, {
+      "shop": "ESMART",
+        "price": arr2[0].value?.esmartPrice,
+        "link": arr2[0].value?.esmartLink
       }
     ]
 
@@ -319,12 +327,12 @@ const ItemDetails = () => {
                   {itemPriceArr.map((item) => (
                     <TableRow key={item.shop}>
                       <TableCell><Typography variant="h4">{item.shop}</Typography></TableCell>
-                      <TableCell><Typography variant="h4">{item.price === 0 ? "Нет данных" : item.price === 1 ? "Нет в наличии" : item.price}</Typography></TableCell>
+                      <TableCell><Typography variant="h4">{(item.price === 0 || item.price === null) ? "Нет данных" : item.price === 1 ? "Нет в наличии" : item.price}</Typography></TableCell>
                       <TableCell> <a href={item.link}>
-                        <img src={require(`../../assets/${item.shop}_icon.png`)} alt="ShopLogo" width="auto" height="40" />
+                        <img src={require(`../../assets/${item.shop}_icon.png`)} alt="ShopLogo" width="auto" height="50" style={{ maxWidth: 120 }} />
                       </a>
                       </TableCell>
-                    </TableRow>
+                    </TableRow> 
                   ))}
                 </TableBody> :
                 <TableBody><TableRow><TableCell><Typography variant="h3" color="red">Данные недоступны</Typography></TableCell></TableRow></TableBody>}
