@@ -17,22 +17,22 @@ const Item = ({ item, width }) => {
   } = useTheme();
 
   const { category, price, name, image } = item?.attributes;
-  // const {
-  //   data: {
-  //     attributes: {
-  //       formats: {
-  //         small: { url },
-  //       },
-  //     },
-  //   },
-  // } = image;
-
   const {
     data: {
-      attributes: {  url 
+      attributes: {
+        formats: {
+          small: { url },
+        },
       },
     },
   } = image;
+
+  // const {
+  //   data: {
+  //     attributes: {  url 
+  //     },
+  //   },
+  // } = image;
 
   return (
     <Box width={width}>
