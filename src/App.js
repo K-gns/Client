@@ -19,6 +19,7 @@ import SocialCards from "./SocialCards/SocialCards.jsx";
 import { getToken } from "./helpers.js";
 import SignIn from "./scenes/SignIn/SignIn";
 import SignUp from "./scenes/SignUp/SignUp";
+import FavouriteList from "./scenes/home/FavouriteList.jsx";
 
 const ScrollTotop = () => {
   const { pathname } = useLocation();
@@ -43,11 +44,13 @@ function App() {
         <Route path="/social" element={<SocialCards />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/favorite" element={<FavouriteList />} />
         <Route
             path="/profile"
             element={getToken() ? <Profile /> : <Navigate to="/signin" />}
           />
       </Routes>
+      
       <CartMenu></CartMenu>
       <Footer />
     </BrowserRouter>

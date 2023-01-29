@@ -1,22 +1,15 @@
-import { Box, Typography } from "@mui/material"; //, Button, IconButton,
+import { Box, Typography, Button, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material"; //, Button, IconButton,
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 //import DataTable, { createTheme } from "react-data-table-component";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Item from "../../components/Item";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-//import AddIcon from "@mui/icons-material/Add";
-//import RemoveIcon from "@mui/icons-material/Remove";
-//import { shades } from "../../theme";
-//import { addToCart } from "../../state";
-//import { useDispatch } from "react-redux";
-// import mvideo_icon from "../../assets/MVIDEO_icon.png";
-// import eldorado_icon from "../../assets/ELDORADO_icon.png";
-// import dns_icon from "../../assets/DNS_icon.png";
-// import citilink_icon from "../../assets/CITILINK_icon.png";
+import Popup from 'reactjs-popup';
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import axios from "axios";
 
 import {
   Chart as ChartJS,
@@ -61,6 +54,8 @@ const ItemDetails = () => {
   const [itemPriceArr, setItemPriceArr] = useState([]);
   const [itemMinPrices, setItemMinPrices] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false)
+  const [problem, SetProblem] = useState(null)
+  const [problemDesc, SetProblemDesc] = useState(null)
 
 
   const handleChange = (event, newValue) => {
@@ -76,7 +71,7 @@ const ItemDetails = () => {
     );
     const itemJson = await item.json();
     setItem(itemJson.data);
-    console.log(itemJson)
+    //console.log(itemJson)
     setIsFavorite(itemJson.data?.attributes?.isFavorite);
   }
 
@@ -87,7 +82,7 @@ const ItemDetails = () => {
         method: "GET",
       }
     );
-    const itemsJson = await items.json();    
+    const itemsJson = await items.json();
     setItems(itemsJson.data);
   }
 
@@ -100,6 +95,7 @@ const ItemDetails = () => {
     );
 
     const itemPriceJson = await item.json();
+    console.log(itemPriceJson)
     //setItemPrice(itemPriceJson.data);
 
     const arr = [];
@@ -131,7 +127,7 @@ const ItemDetails = () => {
 
     const priceArraySorted = [...priceArray].sort((a, b) => ((a.price < b.price) && (a.price > 0) ? -1 : 1));
     setItemPriceArr(priceArraySorted);
-    console.log("price array=", priceArraySorted);
+    //console.log("price array=", priceArraySorted);
 
     //Фетч и график минимальных цен
     const item2 = await fetch(
@@ -176,6 +172,73 @@ const ItemDetails = () => {
     setItemMinPrices(priceMinArray);
   }
 
+  const valueRef = useRef('')
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSend = async () => {
+    setIsLoading(true);
+    console.log(problem, problemDesc)
+
+    try {
+
+      console.log({
+        "data": [{
+          "type": problem,
+          "detailed": problemDesc
+        }]
+      })
+
+      let a = {
+        type: problem,
+        detailed: problemDesc
+      };
+
+      // const response = await fetch(`https://getprice.up.railway.app/api/reports`, {
+      //   method: 'Post',
+      //   headers: {
+      //     Accept: 'application/json',
+      //   },
+      //   body: {
+      //     "data": {
+      //       "attributes": {
+      //         "type": problem,
+      //         "detailed": problemDesc
+      //       }
+
+      //     }
+      //   }
+      // });
+      // const response = await axios.post(
+      //   "https://getprice.up.railway.app/api/reports",
+      //   a);
+      // console.log(response.json())
+
+      const response = axios.post('https://getprice.up.railway.app/api/reports',{
+        json: a.toString()
+      }, {
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': 'Bearer '
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error! status: ${response.status}`);
+        console.log(await response.json())
+      }
+
+      console.log(await response.json())
+      window.location.replace(`/item/${itemId}`);
+      //setData(result);
+    } catch (err) {
+      console.log("не очень")
+      //setErr(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
 
 
   useEffect(() => {
@@ -197,14 +260,14 @@ const ItemDetails = () => {
     },
     scales: {
       y:
-        {
-          min: (itemMinPrices[0]?.price*0.8 / 1000).toFixed() *1000,
-          max: (itemMinPrices[0]?.price*1.3 / 1000).toFixed() *1000,
-        },
+      {
+        min: (itemMinPrices[0]?.price * 0.8 / 1000).toFixed() * 1000,
+        max: (itemMinPrices[0]?.price * 1.3 / 1000).toFixed() * 1000,
+      },
       x:
-        {
-          
-        },
+      {
+
+      },
     },
   };
 
@@ -275,76 +338,146 @@ const ItemDetails = () => {
                   <TableCell><Typography variant="h4"><b>Купить (ссылка)</b></Typography></TableCell>
                 </TableRow>
               </TableHead>
-              { (itemPriceArr.length > 0) ?
-              <TableBody>              
-                {itemPriceArr.map((item) => (
-                  <TableRow key={item.shop}>
-                    <TableCell><Typography variant="h4">{item.shop}</Typography></TableCell>
-                    <TableCell><Typography variant="h4">{item.price === 0 ? "Нет данных" : item.price === 1? "Нет в наличии" : item.price }</Typography></TableCell>
-                    <TableCell> <a href={item.link}>
-                      <img src={require(`../../assets/${item.shop}_icon.png`)} alt="ShopLogo" width="auto" height="40" />
-                    </a>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody> : 
-              <TableBody><TableRow><TableCell><Typography variant="h3" color="red">Данные недоступны</Typography></TableCell></TableRow></TableBody> }
+              {(itemPriceArr.length > 0) ?
+                <TableBody>
+                  {itemPriceArr.map((item) => (
+                    <TableRow key={item.shop}>
+                      <TableCell><Typography variant="h4">{item.shop}</Typography></TableCell>
+                      <TableCell><Typography variant="h4">{item.price === 0 ? "Нет данных" : item.price === 1 ? "Нет в наличии" : item.price}</Typography></TableCell>
+                      <TableCell> <a href={item.link}>
+                        <img src={require(`../../assets/${item.shop}_icon.png`)} alt="ShopLogo" width="auto" height="40" />
+                      </a>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody> :
+                <TableBody><TableRow><TableCell><Typography variant="h3" color="red">Данные недоступны</Typography></TableCell></TableRow></TableBody>}
             </Table>
+
             <br />
-          </Box>
-          <Box paddingBottom={3} paddingTop={3}>
-            <Typography variant="h3"><b>График изменения цены</b></Typography>
-            <Line options={options} data={data} />
-          </Box>
-          <Box>
-            <Box m="20px 0 5px 0" display="flex"
-            onClick={() => addItemToFavourite()} style={{
-              cursor: 'pointer'
-           }}>
-              {isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
-              <Typography variant="h3" sx={{ ml: "5px" }}>{isFavorite ? "В избранном" : "Добавить в избранное" }</Typography>              
+            <Box >
+              <Popup trigger=
+                {<Button style={{ float: 'right' }} variant="text"> Ошибка в данных? Сообщите нам! </Button>}
+                modal nested>
+                {
+                  close => (
+                    <Box>
+                      <Box className='content' sx={{
+                        marginTop: 6,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}>
+                        <Typography variant="h3" style={{ marginBottom: 30 }}>
+                          С чем именно проблема?
+                        </Typography>
+                        <FormControl style={{ minWidth: 350 }} >
+                          <InputLabel id="demo-simple-select-label" style={{ marginTop: 10 }} >Проблема в ...</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value=""
+                            label="error"
+                            onChange={(e) => {
+                              SetProblem(e.target.value);
+                            }}
+                            style={{ maxWidth: 200 }}
+
+                          >
+                            <MenuItem value="price">Цена товара</MenuItem>
+                            <MenuItem value="link">Ссылка на товар</MenuItem>
+                            <MenuItem value="desc">Описание</MenuItem>
+                            <MenuItem value="feature">Характеристики</MenuItem>
+                            <MenuItem value="image">Изображение</MenuItem>
+                            <MenuItem value="other">Другое..</MenuItem>
+                          </Select>
+                          <TextField
+                            required
+                            margin="normal"
+                            id="outlined-password-input"
+                            label="Опишите проблему.."
+                            autoComplete="current-password"
+                            inputRef={valueRef}
+                            multiline
+                            rows={4}
+                            onChange={(e) => {
+                              SetProblemDesc(e.target.value);
+                            }}
+                          />
+                        </FormControl>
+
+                        <Button type="submit" variant="contained"
+                          sx={{ mt: 3, mb: 2 }} onClick={handleSend}>
+                          Отправить
+                        </Button>
+                        <Button variant="outlined" sx={{ mt: 0, mb: 2 }} onClick=
+                          {() => close()}>
+                          Закрыть
+                        </Button>
+                        {isLoading && <h2>Loading...</h2>}
+                      </Box>
+                    </Box>
+                  )
+                }
+              </Popup>
             </Box>
-            <br />
-            <Typography>Товар в категориях: {item?.attributes?.category}</Typography>
+
+
+            <Box paddingBottom={3} paddingTop={3}>
+              <Typography variant="h3"><b>График изменения цены</b></Typography>
+              <Line options={options} data={data} />
+            </Box>
+            <Box>
+              <Box m="20px 0 5px 0" display="flex"
+                onClick={() => addItemToFavourite()} style={{
+                  cursor: 'pointer'
+                }}>
+                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+                <Typography variant="h3" sx={{ ml: "5px" }}>{isFavorite ? "В избранном" : "Добавить в избранное"}</Typography>
+              </Box>
+              <br />
+              <Typography >Товар в категориях: {item?.attributes?.category}</Typography>
+
+
+            </Box>
           </Box>
-
         </Box>
-      </Box>
 
-      {/* INFORMATION */}
-      <Box m="20px 0" >
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Описание" value="description" />
-          <Tab label="Отзывы" value="reviews" />
-        </Tabs>
+        {/* INFORMATION */}
+        <Box m="20px 0" >
+          <Tabs value={value} onChange={handleChange}>
+            <Tab label="Описание" value="description" />
+            <Tab label="Отзывы" value="reviews" />
+          </Tabs>
+        </Box >
+        <Box display="flex" flexWrap="wrap" gap="15px">
+          {value === "description" && (
+            <div>{item?.attributes?.longDescription}</div>
+          )}
+          {value === "reviews" &&
+            <div>
+              отзывы
+            </div>}
+        </Box>
+
+        {/* RELATED ITEMS */}
+        <Box mt="50px" width="100%">
+          <Typography variant="h3" fontWeight="bold">
+            Похожие товары
+          </Typography>
+          <Box
+            mt="20px"
+            display="flex"
+            flexWrap="wrap"
+            columnGap="1.33%"
+            justifyContent="space-between"
+          >
+            {items.slice(0, 4).map((item, i) => (
+              <Item key={`${item.name}-${i}`} item={item} />
+            ))}
+          </Box>
+        </Box>
       </Box >
-      <Box display="flex" flexWrap="wrap" gap="15px">
-        {value === "description" && (
-          <div>{item?.attributes?.longDescription}</div>
-        )}
-        {value === "reviews" &&
-          <div>
-            отзывы
-          </div>}
-      </Box>
-
-      {/* RELATED ITEMS */}
-      <Box mt="50px" width="100%">
-        <Typography variant="h3" fontWeight="bold">
-          Похожие товары
-        </Typography>
-        <Box
-          mt="20px"
-          display="flex"
-          flexWrap="wrap"
-          columnGap="1.33%"
-          justifyContent="space-between"
-        >
-          {items.slice(0, 4).map((item, i) => (
-            <Item key={`${item.name}-${i}`} item={item} />
-          ))}
-        </Box>
-      </Box>
     </Box >
   );
 };

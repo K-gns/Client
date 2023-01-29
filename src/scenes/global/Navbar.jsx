@@ -3,8 +3,9 @@ import {  useSelector } from "react-redux"; //useDispatch
 import { Badge, Box, IconButton, Button, TextField, Typography } from "@mui/material";
 import {
   MenuOutlined,
-  SearchOutlined,
+  SearchOutlined
 } from "@mui/icons-material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 //mport { setIsCartOpen } from "../../state";
@@ -177,28 +178,16 @@ function Navbar() {
         </Space>
 
 
-          <IconButton sx={{ color: "black" }}>
-            <SearchOutlined />
+          <IconButton sx={{ color: "black" }} >
+            <SearchOutlined href="/favorite" />
           </IconButton>
           
-          <Badge
-            badgeContent={cart.length}
-            color="secondary"
-            invisible={cart.length === 0}
-            sx={{
-              "& .MuiBadge-badge": {
-                right: 5,
-                top: 5,
-                padding: "0 4px",
-                height: "14px",
-                minWidth: "13px",
-              },
-            }}
-          >
-          </Badge>
+          <IconButton sx={{ color: "black" }} href="/favorite">
+            <FavoriteIcon />
+          </IconButton>
           <IconButton sx={{ color: "black" }}>
             <MenuOutlined />
-          </IconButton>
+          </IconButton>         
 
         </Box>
       </Box>
