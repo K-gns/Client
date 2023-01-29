@@ -95,7 +95,7 @@ const ItemDetails = () => {
     );
 
     const itemPriceJson = await item.json();
-    console.log(itemPriceJson)
+    //console.log(itemPriceJson)
     //setItemPrice(itemPriceJson.data);
 
     const arr = [];
@@ -145,7 +145,7 @@ const ItemDetails = () => {
     const current = new Date();
     const today = `${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()}`;
 
-    console.log("today=", today);
+    //console.log("today=", today);
 
 
     var priceMinArray = [
@@ -176,25 +176,27 @@ const ItemDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async () => {
-    setIsLoading(true);
-    console.log(problem, problemDesc)
 
     try {
       axios.post('https://getprice.up.railway.app/api/reports',
-      {
-        "data": {
-          type: problem,
-          detailed: problemDesc,
-          itemID: itemId
+        {
+          "data": {
+            type: problem,
+            detailed: problemDesc,
+            itemID: itemId
+          }
         }
-      }
-    )
-    .then(response => {
-      console.log(response);
-    });
+      )
+        .then(response => {
+          //console.log(response);
+        });
 
+
+    } catch {
+      console.log("Ошибка при отправке!")
     } finally {
-      setIsLoading(false);
+      setIsLoading(true);
+      console.log(isLoading);
     }
   };
 
@@ -374,7 +376,7 @@ const ItemDetails = () => {
                           {() => close()}>
                           Закрыть
                         </Button>
-                        {isLoading && <h2>Подождите...</h2>}
+                        {isLoading && <h2>Готово!</h2>}
                       </Box>
                     </Box>
                   )
@@ -414,10 +416,12 @@ const ItemDetails = () => {
           {value === "description" && (
             <div>{item?.attributes?.longDescription}</div>
           )}
-          {value === "reviews" &&
-            <div>
-              отзывы
-            </div>}
+          {value === "reviews" && (
+            <Box>
+              <br /><br /><br /><br /><br />
+
+              ЗДЕСЬ БУДУТ ОТЗЫВЫ! ЗДЕСЬ БУДУТ ОТЗЫВЫ ! ЗДЕСЬ БУДУТ ОТЗЫВЫ!
+            </Box>)}
         </Box>
 
         {/* RELATED ITEMS */}
