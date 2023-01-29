@@ -11,6 +11,8 @@ import Popup from 'reactjs-popup';
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import axios from "axios";
 
+import { useAuthContext } from "../../context/AuthContext";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -57,6 +59,7 @@ const ItemDetails = () => {
   const [problem, SetProblem] = useState(null)
   const [problemDesc, SetProblemDesc] = useState(null)
 
+  const { user } = useAuthContext();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -251,16 +254,27 @@ const ItemDetails = () => {
   };
 
   async function addItemToFavourite() {
-    // const item = await fetch(
-    //   `http://localhost:1337/api/items/${itemId}?populate=image`,
-    //   {
-    //     method: "GET",
-    //   }
-    // );
-    // const itemJson = await item.json();
-    // setItem(itemJson.data);
-    console.log("Добавлелнлнл");
-    setIsFavorite(!isFavorite);
+    console.log("userid", user?.id )
+    try {
+      axios.post('https://getprice.up.railway.app/api/favourited-items',
+        {
+          "data": {
+            itemID: itemId,
+            userID: user?.id,
+            isActive: true
+          }
+        }
+      )
+        .then(response => {
+          console.log(response);
+        });
+
+    } catch {
+      console.log("Ошибка при отправке!")
+    } finally {
+      console.log("Добавлелнлнл");
+      setIsFavorite(!isFavorite);
+    }    
   }
 
 
