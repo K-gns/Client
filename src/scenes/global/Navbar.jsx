@@ -11,6 +11,10 @@ import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 //mport { setIsCartOpen } from "../../state";
 
+import { useAuthContext } from "../../context/AuthContext";
+import { removeToken } from "../../helpers";
+import { Space } from "antd";
+
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
@@ -21,6 +25,8 @@ function Navbar() {
   const valueRef = useRef('')
   //const [data, setData] = useState({ data: [] });
   const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useAuthContext();
   //const [err, setErr] = useState('');
 
   // const sendValue = () => {
@@ -55,13 +61,17 @@ function Navbar() {
 
       //setData(result);
     } catch (err) {
-      console.log("хуй хуй")
+      console.log("не очень")
       //setErr(err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleLogout = () => {
+    removeToken();
+    navigate("/signin", { replace: true });
+  };
 
   return (
     <Box
@@ -135,6 +145,38 @@ function Navbar() {
               }
             </Popup>
           </Box>
+
+          <Space className="header_space">
+          <Space className="auth_buttons">
+            {user ? (
+              <>
+                <Button className="auth_button_login" href="/profile" type="link">
+                  Привет, {user.username}!
+                </Button>
+                <Button
+                  className="auth_button_signUp"
+                  type="primary"
+                  onClick={handleLogout}
+                >
+                  Выйти
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button className="auth_button_login" href="/signin" type="link">
+                  Войти
+                </Button>
+                <Button
+                  className="auth_button_signUp"
+                  href="/signup"
+                  type="primary"
+                >
+                  Зарегистрироваться
+                </Button>
+              </>
+            )}
+          </Space>
+        </Space>
 
 
           <IconButton sx={{ color: "black" }}>
