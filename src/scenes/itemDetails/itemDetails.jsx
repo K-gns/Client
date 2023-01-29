@@ -180,7 +180,7 @@ const ItemDetails = () => {
     console.log(problem, problemDesc)
 
     try {
-      const response = axios.post('https://getprice.up.railway.app/api/reports',
+      axios.post('https://getprice.up.railway.app/api/reports',
       {
         "data": {
           type: problem,
