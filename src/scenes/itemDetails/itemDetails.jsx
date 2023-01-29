@@ -1,21 +1,21 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material"; //, Button, IconButton,
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import DataTable, { createTheme } from "react-data-table-component";
+//import DataTable, { createTheme } from "react-data-table-component";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Item from "../../components/Item";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { shades } from "../../theme";
-import { addToCart } from "../../state";
-import { useDispatch } from "react-redux";
-import mvideo_icon from "../../assets/MVIDEO_icon.png";
-import eldorado_icon from "../../assets/ELDORADO_icon.png";
-import dns_icon from "../../assets/DNS_icon.png";
-import citilink_icon from "../../assets/CITILINK_icon.png";
+//import AddIcon from "@mui/icons-material/Add";
+//import RemoveIcon from "@mui/icons-material/Remove";
+//import { shades } from "../../theme";
+//import { addToCart } from "../../state";
+//import { useDispatch } from "react-redux";
+// import mvideo_icon from "../../assets/MVIDEO_icon.png";
+// import eldorado_icon from "../../assets/ELDORADO_icon.png";
+// import dns_icon from "../../assets/DNS_icon.png";
+// import citilink_icon from "../../assets/CITILINK_icon.png";
 import { Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 
 import {
@@ -42,22 +42,22 @@ ChartJS.register(
   Legend
 );
 
-const images = [{
-  mvideo_icon,
-  eldorado_icon,
-  dns_icon,
-  citilink_icon
-}]
+// const images = [{
+//   mvideo_icon,
+//   eldorado_icon,
+//   dns_icon,
+//   citilink_icon
+// }]
 
 
 const ItemDetails = () => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const { itemId } = useParams();
   const [value, setValue] = useState("description");
-  const [count, setCount] = useState(1);
+  //const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);
   const [items, setItems] = useState([]);
-  const [itemPrice, setItemPrice] = useState([]);
+  //const [itemPrice, setItemPrice] = useState([]);
   const [itemPriceArr, setItemPriceArr] = useState([]);
   const [itemMinPrices, setItemMinPrices] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false)
@@ -100,7 +100,7 @@ const ItemDetails = () => {
     );
 
     const itemPriceJson = await item.json();
-    setItemPrice(itemPriceJson.data);
+    //setItemPrice(itemPriceJson.data);
 
     const arr = [];
     Object.keys(itemPriceJson.data).forEach(key => arr.push({ name: key, value: itemPriceJson.data[key] }))
@@ -208,7 +208,7 @@ const ItemDetails = () => {
     },
   };
 
-  const labels = ['0', '1', '2'];
+  //const labels = ['0', '1', '2'];
 
   const data = {
     labels: itemMinPrices?.map(row => row?.time),

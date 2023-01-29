@@ -1,35 +1,35 @@
-import React, { useState, useRef, Component } from 'react'
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef } from 'react'
+import {  useSelector } from "react-redux"; //useDispatch
 import { Badge, Box, IconButton, Button, TextField, Typography } from "@mui/material";
 import {
   PersonOutline,
-  ShoppingBagOutlined,
+  //ShoppingBagOutlined,
   MenuOutlined,
   SearchOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
-import { setIsCartOpen } from "../../state";
+//mport { setIsCartOpen } from "../../state";
 
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
 function Navbar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   const valueRef = useRef('')
-  const [data, setData] = useState({ data: [] });
+  //const [data, setData] = useState({ data: [] });
   const [isLoading, setIsLoading] = useState(false);
-  const [err, setErr] = useState('');
+  //const [err, setErr] = useState('');
 
-  const sendValue = () => {
-    return console.log(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
-  }
+  // const sendValue = () => {
+  //   return console.log(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
+  // }
 
-  const goSearch = () => {
-    return console.log(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
-  }
+  // const goSearch = () => {
+  //   return console.log(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
+  // }
 
   const handleClick = async () => {
     setIsLoading(true);
@@ -88,7 +88,7 @@ function Navbar() {
           sx={{ "&:hover": { cursor: "pointer" } }}
           color={shades.secondary[500]}
         >
-          <a fontFamily='Verdana' fontSize="50px">ЦЕННИК.РФ</a>
+          <a href="/" style={{ textDecoration: 'none', color: 'red' }} fontFamily='Verdana' fontSize="50px">ЦЕННИК.РФ</a>
         </Box>
         <Box
           display="flex"
