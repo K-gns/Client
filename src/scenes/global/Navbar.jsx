@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react'
 import {  useSelector } from "react-redux"; //useDispatch
 import { Badge, Box, IconButton, Button, TextField, Typography } from "@mui/material";
 import {
-  PersonOutline,
-  //ShoppingBagOutlined,
   MenuOutlined,
   SearchOutlined,
 } from "@mui/icons-material";
@@ -182,9 +180,7 @@ function Navbar() {
           <IconButton sx={{ color: "black" }}>
             <SearchOutlined />
           </IconButton>
-          <IconButton sx={{ color: "black" }}>
-            <PersonOutline />
-          </IconButton>
+          
           <Badge
             badgeContent={cart.length}
             color="secondary"
